@@ -20,6 +20,11 @@ namespace AssignmentManagement.Core
         {
             try
             {
+                if (_assignments.Any(a=>a.Title.Equals(assignment.Title, StringComparison.OrdinalIgnoreCase)))
+                {
+                    _logger.Log($"Duplicate assignment title rejected: {assignment.Title}");
+                    return false;
+                }
                 _assignments.Add(assignment);
                 LogAssignmentAction("Added", assignment);
                 return true;
