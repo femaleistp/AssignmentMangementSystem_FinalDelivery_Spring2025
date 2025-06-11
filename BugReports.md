@@ -77,10 +77,10 @@ Not applicable (manual test only)
 **Root Cause:**  
 AssignmentService does not check for an existing assignment with the same title.
 **Fix:**  
-(Planned) Add a check in AddAssignment() to prevent duplicates.
+A check was added in 'AssignmentService.AddAssignment()' to prevent duplicates by comparing titles (case-insensitive).
 
 **Test Added:**  
-Not yet (will be added when fixed)
+AddAssignment_ShouldRejectDuplicateTitle in AssignmentServiceTests.cs verifies that duplicates are rejected.
 
 ---
 

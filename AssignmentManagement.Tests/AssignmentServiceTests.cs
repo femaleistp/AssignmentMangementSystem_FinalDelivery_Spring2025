@@ -56,6 +56,26 @@ namespace AssignmentManagement.Tests
             Assert.Contains(a, service.ListAll());
         }
 
+        // BUG-2025-351: Add testfor duplicate title rejection
+        [Fact] 
+        public void AddAssignment_ShouldRejectDuplicateTitle()
+        {
+            // Arrange
+            var service = new AssignmentService(new AssignmentFormatter(), new ConsoleAppLogger());
+
+            var a1 = new Assignment("Final Essay", "Write the final essay.", DateTime.Now.AddDays(2), AssignmentPriority.Medium, "Submit via Canvas");
+            var a2 = new Assignment("Final Essay", "Rewrite of final essay.", DateTime.Now.AddDays(3), AssignmentPriority.Medium, "Submit in person");
+
+            // Act
+            var firstResult = service.AddAssignment(a1);
+            var secondResult = service.AddAssignment(a2);
+
+            // Assert
+            Assert.True(firstResult);
+            Assert.False(secondResult);
+        }
+
+
         // BUG-2025-344: No logging when overdue status is checked.
         // This test exposes the missing CheckIfOverdue method and required log output.
         [Fact]
