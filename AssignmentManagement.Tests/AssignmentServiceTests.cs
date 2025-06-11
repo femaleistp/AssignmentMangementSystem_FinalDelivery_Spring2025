@@ -1,5 +1,6 @@
 
 using AssignmentManagement.Core;
+using Microsoft.VisualBasic;
 using Moq;
 using Xunit;
 
@@ -75,6 +76,21 @@ namespace AssignmentManagement.Tests
             Assert.False(secondResult);
         }
 
+        // BUG-2025-352: Verify missing assignment logging
+        [Fact]
+        public void MarkAssignmentComplete_ShouldLog_WhenAssignmentNotFound()
+        {
+            var mockLogger = new Mock<IAppLogger>();
+            var service = new AssignmentService(new AssignmentFormatter(), mockLogger.Object);
+
+            var result = service.MarkAssignmentComplete("Nonexistent Title");
+
+            Assert.False(result);
+            mockLogger.Verify(log => log.Log(It.Is<string>(msg =>
+            msg.Contains("not found") &&
+            msg.Contains("Nonexistent Title")
+            )), Times.Once);
+        }
 
         // BUG-2025-344: No logging when overdue status is checked.
         // This test exposes the missing CheckIfOverdue method and required log output.

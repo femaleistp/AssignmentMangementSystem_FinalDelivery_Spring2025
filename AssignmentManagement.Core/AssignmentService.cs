@@ -89,8 +89,11 @@ namespace AssignmentManagement.Core
             if (assignment != null)
             {
                 assignment.MarkComplete();
+                LogAssignmentAction("Marked complete", assignment);
                 return true;
             }
+
+            _logger.Log($"Attempted to mark complete but assignment not found: {title}");
             return false;
         }
 

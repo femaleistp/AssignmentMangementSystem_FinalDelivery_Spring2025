@@ -97,9 +97,9 @@ AddAssignment_ShouldRejectDuplicateTitle in AssignmentServiceTests.cs verifies t
 Missing logging inside the failure branch of MarkAssignmentComplete()
 
 **Fix:**  
-(Planned) Add logging when assignment is not found
+Added logging inside AssignmentService.MarkAssignmentComplete() when assignment is not found.
 **Test Added:**  
-Not yet
+MarkAssignmentComplete_ShoudlLog_WhenAssignmentNotFound verifes the logger records a message for missing titles.
 
 ---
 
