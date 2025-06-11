@@ -41,3 +41,81 @@ The logic was updated to return `true` only when:
 
 **Test Added:**  
 The test `IsOverdue_ShouldReturnFalse_WhenAssignmentIsCompleted` confirms that completed assignments are not flagged as overdue. Additional coverage ensures the method handles null due dates correctly.
+
+---
+
+### BUG-2025-350: ConsoleUI Allows Empty Input
+**Reported by:** QA Intern  
+**Date:** 2025-06-11  
+
+**Steps to Reproduce:**  
+- Launch Console UI
+- Select "Add Assignment"
+- Leave title or description blank and press Enter
+- Assignment fails or exception is caught
+
+**Root Cause:**  
+The ConsoleUI does not validate title or description before calling the constructor
+
+**Fix:**  
+Validation logic was added to ensure non-empty input before creating the assignment.
+
+**Test Added:**  
+Not applicable (manual test only)
+
+---
+
+### BUG-2025-351: Duplicate Assignments Allowed
+**Reported by:** Manual Tester
+**Date:** 2025-06-11  
+
+**Steps to Reproduce:**  
+- Add an assignment with the title "Quiz 1"
+- Add another assignment with title "Quiz 1"
+- Both are added without conflict
+
+**Root Cause:**  
+AssignmentService does not check for an existing assignment with the same title.
+**Fix:**  
+(Planned) Add a check in AddAssignment() to prevent duplicates.
+
+**Test Added:**  
+Not yet (will be added when fixed)
+
+---
+
+### BUG-2025-352: Missing Logging When Marking Nonexistent Assignment Complete
+**Reported by:** QA Reviewer
+**Date:** 2025-06-11  
+
+**Steps to Reproduce:**  
+- Choose "Mark Complete" in ConsoleUI
+- Enter a title that doesn't exist
+- Message is shown, but no logging occurs
+
+**Root Cause:**  
+Missing logging inside the failure branch of MarkAssignmentComplete()
+
+**Fix:**  
+(Planned) Add logging when assignment is not found
+**Test Added:**  
+Not yet
+
+---
+
+### BUG-2025-353: AssignmentPriority Enum Not Validated in API
+**Reported by:** API Tester  
+**Date:** 2025-06-11  
+
+**Steps to Reproduce:**  
+- Send POST request with invalid priority (e.g., "Extreme")
+- App throws unhandled exception
+
+**Root Cause:**  
+ConsoleUI directly passes user input to the Assignment constructor without validation
+
+**Fix:**  
+Validate input before creating the Assignment object; reject blank titles/descriptions
+
+**Test Added:**  
+Unit test for AddAssignment() with empty strings and manual test for UI validation
