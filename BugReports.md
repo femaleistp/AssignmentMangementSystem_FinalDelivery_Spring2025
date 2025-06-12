@@ -119,3 +119,23 @@ Validate input before creating the Assignment object; reject blank titles/descri
 
 **Test Added:**  
 Unit test for AddAssignment() with empty strings and manual test for UI validation
+
+---
+
+### BUG-2025-354: DI Registration for IAssignmentService Missing  
+**Reported by:** Developer (Brittany)  
+**Date:** 2025-06-11  
+
+**Steps to Reproduce:**  
+- Register `AssignmentService` as `services.AddSingleton<AssignmentService, AssignmentService>();`
+- Inject `IAssignmentService` into `ConsoleUI`
+- Run the console app  
+
+**Root Cause:**  
+`IAssignmentService` was not registered in the DI container. Only the concrete `AssignmentService` was, which caused a runtime `InvalidOperationException`.
+
+**Fix:**  
+Change registration to `services.AddSingleton<IAssignmentService, AssignmentService>();`  
+
+**Test Added:**  
+No automated test; manually verified by launching `ConsoleUI`
