@@ -107,9 +107,9 @@ namespace AssignmentManagement.Tests
             //Assert
             Assert.True(isOverdue); // Should be overdue
             mockLogger.Verify(log => log.Log(It.Is<string>(msg =>
-                msg.Contains("Checked if assignment") &&
+                msg.Contains("Checked if Assignment") &&
                 msg.Contains("Lecture: SOLID Principles") &&
-                msg.Contains("True")
+                msg.Contains("is overdue: True")
             )), Times.Once);
         }
 

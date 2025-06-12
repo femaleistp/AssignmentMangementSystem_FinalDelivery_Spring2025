@@ -139,3 +139,24 @@ Change registration to `services.AddSingleton<IAssignmentService, AssignmentServ
 
 **Test Added:**  
 No automated test; manually verified by launching `ConsoleUI`
+
+---
+
+### BUG-2025-355: Mock Verification Failed in Overdue Logging Test  
+**Reported by:** Developer (Brittany)  
+**Date:** 2025-06-11  
+
+**Steps to Reproduce:**  
+- Run the unit test `CheckIfOverdue_ShouldLogResult_WhenAssignmentExists`  
+- The test fails with `Moq.MockException`  
+- Message shows:  
+  `Expected invocation on the mock once, but was 0 times`
+
+**Root Cause:**  
+The mock `ILogger<T>` expected a `LogInformation` call with a message template that did not match the actual runtime output due to interpolation or format mismatch.
+
+**Fix:**  
+Adjusted the `Verify()` expectation in the test to match the exact format string used in the application, ensuring correct match against the logger’s internal template.
+
+**Test Added:**  
+Fix applied directly to existing test `CheckIfOverdue_ShouldLogResult_WhenAssignmentExists`; no new test added.
