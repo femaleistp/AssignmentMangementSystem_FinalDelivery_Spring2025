@@ -103,22 +103,24 @@ MarkAssignmentComplete_ShoudlLog_WhenAssignmentNotFound verifes the logger recor
 
 ---
 
-### BUG-2025-353: AssignmentPriority Enum Not Validated in API
+### BUG-2025-353: AssignmentPriority Enum Not Validated in ConsoleUI  
 **Reported by:** API Tester  
 **Date:** 2025-06-11  
 
 **Steps to Reproduce:**  
-- Send POST request with invalid priority (e.g., "Extreme")
-- App throws unhandled exception
+- Launch Console UI  
+- Choose "Add Assignment"  
+- Enter valid title and description  
+- Enter an invalid priority (e.g., "Extreme")  
 
 **Root Cause:**  
-ConsoleUI directly passes user input to the Assignment constructor without validation
+Previously, `ConsoleUI` passed raw string input directly to the `Assignment` constructor without validating it. This caused the app to throw an exception on invalid enum values.
 
 **Fix:**  
-Validate input before creating the Assignment object; reject blank titles/descriptions
+Input validation was added using `Enum.TryParse()` to ensure only valid values (Low, Medium, High) are accepted before calling the `Assignment` constructor.
 
 **Test Added:**  
-Unit test for AddAssignment() with empty strings and manual test for UI validation
+Manual testing was performed through the Console UI. Invalid input now triggers a validation message and prevents assignment creation.
 
 ---
 
@@ -163,3 +165,22 @@ The method logs a message using `LogAssignmentAction()` when an assignment is fo
 The unit test `CheckIfOverdue_ShouldLogResult_WhenAssignmentExists` was completed and passes.  
 It confirms that the method logs the correct message format and returns the correct overdue status.
 
+---
+
+### BUG-2025-356: Assignment Constructor Does Not Reject Invalid Enum Cast  
+**Reported by:** Developer (Brittany)  
+**Date:** 2025-06-11  
+
+**Steps to Reproduce:**  
+- Manually cast an invalid integer to `AssignmentPriority` (e.g., `(AssignmentPriority)999`)  
+- Pass it to the `Assignment` constructor  
+- No exception is thrown
+
+**Root Cause:**  
+The constructor of `Assignment` did not validate that the passed enum value was within the defined range of `AssignmentPriority`. This allowed invalid enum values to be assigned silently.
+
+**Fix:**  
+Added a guard clause to the `Assignment` constructor to validate the enum using `Enum.IsDefined` and throw an `ArgumentException` if the value is invalid.
+
+**Test Added:**  
+`AssignmentConstructor_ShouldThrowException_OnInvalidPriority` ensures invalid enum values now raise a meaningful error.

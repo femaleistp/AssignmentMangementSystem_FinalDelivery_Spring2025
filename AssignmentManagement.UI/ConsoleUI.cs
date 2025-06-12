@@ -66,12 +66,22 @@ namespace AssignmentManagement.UI
         {
             Console.WriteLine("Enter assignment title: ");
             var title = Console.ReadLine();
+
             Console.WriteLine("Enter assignment description: ");
             var description = Console.ReadLine();
 
+            Console.WriteLine("Enter assignment priority (Low, Medium, High):");
+            var priorityInput = Console.ReadLine();
+
+            if (!Enum.TryParse<AssignmentPriority>(priorityInput, true, out var priority))
+            {
+                Console.WriteLine("Invalid priority entered. Please enter Low, Medium, or High.");
+                return;
+            }
+
             try
             {
-                var assignment = new Assignment(title, description, DateTime.Now.AddDays(3), AssignmentPriority.Medium, "Notes 1");
+                var assignment = new Assignment(title, description, DateTime.Now.AddDays(3), priority, "Notes 1");
                 if (_assignmentService.AddAssignment(assignment))
                 {
                     Console.WriteLine("Assignment added successfully.");
@@ -86,6 +96,7 @@ namespace AssignmentManagement.UI
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
+
 
         private void ListAllAssignments()
         {

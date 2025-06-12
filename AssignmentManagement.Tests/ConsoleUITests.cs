@@ -18,7 +18,7 @@ namespace AssignmentManagement.Tests
             var ui = new ConsoleUI(mock.Object);
 
             // Correct input: choose menu option 1, enter title, enter description, then exit
-            using var input = new StringReader("1\nSample Title\nSample Description\n0\n");
+            using var input = new StringReader("1\nSample Title\nSample Description\nMedium\n0\n");
             System.Console.SetIn(input);
 
             ui.Run();

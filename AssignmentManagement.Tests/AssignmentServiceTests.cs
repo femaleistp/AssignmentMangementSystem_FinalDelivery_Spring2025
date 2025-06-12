@@ -92,6 +92,18 @@ namespace AssignmentManagement.Tests
             )), Times.Once);
         }
 
+        // BUG-2025-353: Verify assignment completion logging
+        [Fact] 
+        public void AssignmentConstructor_ShouldThrowException_OnInvalidPriority()
+        {
+            // Act & Assert
+            var ex = Assert.Throws<ArgumentException>(() =>
+                new Assignment("Test", "Test description", DateTime.Today, (AssignmentPriority)999, "Notes")
+            );
+
+            Assert.Contains("Invalid priority", ex.Message);
+        }
+
         // BUG-2025-344: No logging when overdue status is checked.
         // This test exposes the missing CheckIfOverdue method and required log output.
         [Fact]
