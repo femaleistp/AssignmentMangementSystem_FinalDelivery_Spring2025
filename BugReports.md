@@ -153,10 +153,13 @@ No automated test; manually verified by launching `ConsoleUI`
   `Expected invocation on the mock once, but was 0 times`
 
 **Root Cause:**  
-The mock `ILogger<T>` expected a `LogInformation` call with a message template that did not match the actual runtime output due to interpolation or format mismatch.
+The test expected a specific log format, but the logging in `CheckIfOverdue()` was not implemented at the time.
 
 **Fix:**  
-Adjusted the `Verify()` expectation in the test to match the exact format string used in the application, ensuring correct match against the logger’s internal template.
+Implemented `CheckIfOverdue(string title)` in `AssignmentService`.  
+The method logs a message using `LogAssignmentAction()` when an assignment is found, and logs a fallback message if not.
 
 **Test Added:**  
-Fix applied directly to existing test `CheckIfOverdue_ShouldLogResult_WhenAssignmentExists`; no new test added.
+The unit test `CheckIfOverdue_ShouldLogResult_WhenAssignmentExists` was completed and passes.  
+It confirms that the method logs the correct message format and returns the correct overdue status.
+
